@@ -12,8 +12,8 @@ import { OnboardingForm } from "@/features/auth/components/Onboarding/Onboarding
 export function UserBlockingModal() {
   return (
     <Dialog open>
-      <DialogContent showCloseButton={false}>
-        <DialogHeader>
+      <DialogContent showCloseButton={false} className="w-[90%] max-w-md">
+        <DialogHeader className="items-start text-left">
           <DialogTitle>Welcome</DialogTitle>
           <DialogDescription>
             Please enter your username and job title to access the Anime
