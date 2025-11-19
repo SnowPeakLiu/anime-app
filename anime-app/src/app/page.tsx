@@ -1,22 +1,31 @@
 import { cookies } from "next/headers";
-import { UserBlockingModal } from "@/features/auth/components/Onboarding/UserBlockingModal";
+import { UserBlockingModal } from "@/features/auth/components/Onboarding/UserBlockingModal.ui";
 import { AnimeList } from "@/features/anime/components/AnimeList.component";
+
+type SessionUser = {
+  username?: string;
+  jobTitle?: string;
+};
+
+function parseSessionUser(value: string | undefined): SessionUser | null {
+  if (!value) return null;
+  try {
+    return JSON.parse(value) as SessionUser;
+  } catch {
+    return null;
+  }
+}
 
 export default async function Home() {
   const cookieStore = await cookies();
   const session = cookieStore.get("user_session");
 
-  if (!session) {
-    // Requirement 7: Blocking element (modal) shown before any data fetching.
-    return <UserBlockingModal />;
-  }
+  const parsed = parseSessionUser(session?.value);
+  const username = parsed?.username?.trim();
+  const jobTitle = parsed?.jobTitle?.trim();
 
-  const user = JSON.parse(session.value) as {
-    username?: string;
-    jobTitle?: string;
-  };
-
-  if (!user.username || !user.jobTitle) {
+  // Only allow access when both username and job title are non-empty strings.
+  if (!username || !jobTitle) {
     return <UserBlockingModal />;
   }
 
@@ -28,7 +37,7 @@ export default async function Home() {
             Anime App
           </h1>
           <p className="mt-2 text-sm text-muted-foreground">
-            Welcome, {user.username} ({user.jobTitle})
+            Welcome, {username} ({jobTitle})
           </p>
         </header>
         <AnimeList />
