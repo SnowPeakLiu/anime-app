@@ -86,7 +86,6 @@ Follow these steps sequentially. Each step represents 1-2 commits.
 
 **5. Definitions & Hooks**
 *   **Action:**
-    *   Create `src/graphql/fragments/media.fragment.ts` (define Image, Title, Description).
     *   Create `src/graphql/queries/getAnime.query.ts` (Accept `$page` and `$perPage`).
     *   Create `src/hooks/useAnimeList.ts`. This hook imports the query and returns `{ data, loading, error }`.
 
