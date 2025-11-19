@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { Footer } from "@/components/Footer.ui";
+import { Providers } from "./providers";
 
 export const metadata: Metadata = {
   title: "Anime GraphQL Challenge",
@@ -15,8 +16,10 @@ export default function RootLayout({
   return (
     <html lang="en" className="h-full">
       <body className="flex min-h-screen flex-col bg-background text-foreground antialiased">
-        <main className="flex-1">{children}</main>
-        <Footer />
+        <Providers>
+          <main className="flex-1">{children}</main>
+          <Footer />
+        </Providers>
       </body>
     </html>
   );
