@@ -1,8 +1,10 @@
 "use client";
 
 import { useSearchParams, useRouter } from "next/navigation";
+import { useState } from "react";
 import { useAnimeList } from "@/hooks/useAnimeList";
 import { AnimeGrid } from "./AnimeGrid.ui";
+import { DetailModal } from "./DetailModal.ui";
 import type { AnimeMedia } from "@/graphql/types";
 
 export function AnimeList() {
@@ -13,6 +15,8 @@ export function AnimeList() {
   const page = Number(pageParam) || 1;
 
   const { data, loading, error } = useAnimeList(page);
+  const [selectedItem, setSelectedItem] = useState<AnimeMedia | null>(null);
+  const [isDetailOpen, setIsDetailOpen] = useState(false);
 
   const handlePageChange = (nextPage: number) => {
     const params = new URLSearchParams(searchParams.toString());
@@ -42,8 +46,8 @@ export function AnimeList() {
   const items: AnimeMedia[] = data?.Page.media ?? [];
 
   const handleItemClick = (media: AnimeMedia) => {
-    // Step 11 will implement modal interaction when an item is clicked.
-    void media;
+    setSelectedItem(media);
+    setIsDetailOpen(true);
   };
 
   return (
@@ -55,6 +59,17 @@ export function AnimeList() {
       </header>
 
       <AnimeGrid items={items} onItemClick={handleItemClick} />
+
+      <DetailModal
+        item={selectedItem}
+        open={isDetailOpen}
+        onOpenChange={(open) => {
+          setIsDetailOpen(open);
+          if (!open) {
+            setSelectedItem(null);
+          }
+        }}
+      />
 
       <div className="flex items-center justify-between pt-2 text-xs">
         <button
