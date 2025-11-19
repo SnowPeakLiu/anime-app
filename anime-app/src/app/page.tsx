@@ -25,7 +25,7 @@ export default async function Home() {
       <div className="w-full max-w-5xl px-4 py-8 space-y-6">
         <header className="text-center sm:text-left">
           <h1 className="text-3xl font-semibold tracking-tight">
-            Anime Information Page
+            Anime App
           </h1>
           <p className="mt-2 text-sm text-muted-foreground">
             Welcome, {user.username} ({user.jobTitle})
