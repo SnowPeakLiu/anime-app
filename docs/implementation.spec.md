@@ -14,18 +14,17 @@ To align with Leonardo.Ai's preference for **as few dependencies as possible** (
 src/
 ├── app/
 │   ├── layout.tsx           # Global layout (Fonts, Metadata)
-│   ├── page.tsx             # Main page (Information Page)
-│   └── providers.tsx        # Wraps Apollo & Auth Context
+│   ├── page.tsx             # Gatekeeper + Information Page shell
+│   ├── actions.ts           # Server Actions (e.g. saveUserInfo)
+│   └── providers.tsx        # Wraps Apollo Client for client-side GraphQL
 ├── components/
 │   └── ui/                  # Shadcn UI generic components (Button, Input, etc.)
 ├── features/
-│   ├── auth/                # "Blocking Element" logic
-│   │   ├── auth.context.tsx # Persist State (User/Job)
-│   │   ├── auth.types.ts
-│   │   ├── components/
-│   │   │   ├── AuthGate.component.tsx   # Smart: Checks context, renders Form or Children
-│   │   │   └── OnboardingForm.ui.tsx    # Dumb: UI for inputs
-│   ├── anime/               # Anime "Information Page" logic
+│   ├── auth/                # Auth-related UI and logic
+│   │   └── components/Onboarding/
+│   │       ├── OnboardingForm.ui.tsx      # Onboarding form UI
+│   │       └── UserBlockingModal.tsx      # Auth blocking modal UI
+│   ├── anime/               # Anime Information Page UI and logic
 │   │   ├── anime.types.ts
 │   │   ├── components/
 │   │   │   ├── AnimeList.component.tsx  # Smart: Calls hooks, manages pagination
@@ -86,7 +85,6 @@ Follow these steps sequentially. Each step represents 1-2 commits.
 
 **5. Definitions & Hooks**
 *   **Action:**
-    *   Create `src/graphql/fragments/media.fragment.ts` (define Image, Title, Description).
     *   Create `src/graphql/queries/getAnime.query.ts` (Accept `$page` and `$perPage`).
     *   Create `src/hooks/useAnimeList.ts`. This hook imports the query and returns `{ data, loading, error }`.
 
@@ -97,23 +95,25 @@ Follow these steps sequentially. Each step represents 1-2 commits.
 *   **Persistence:** After refreshing the browser, the saved username and job title should still be present and the blocking element should stay dismissed (Challenge step 7b).
 *   **Editing:** Ensure the user can view their stored username and job title and successfully update them, with changes reflected immediately and persisting on reload (Challenge step 7ii and Phase 5 step 12).
 
-**6. Auth Context (State)**
-*   **Action:** Create `src/features/auth/auth.context.tsx`.
-    *   Use `createContext`.
-    *   State: `username`, `jobTitle`.
-    *   Logic: Load from `localStorage` on mount. Save to `localStorage` on update.
+**6. Auth Storage (Cookies + Server Actions)**
+*   **Action:** Create `src/app/actions.ts` and define a `saveUserInfo(formData: FormData)` server action.
+    *   Read `username` and `jobTitle` from `formData`.
+    *   Serialize to JSON and store in a `user_session` cookie via `cookies().set`.
+    *   Call `revalidatePath('/')` so the root page re-runs with the new cookie.
 
 **7. Auth UI (The Form)**
 *   **Action:** Create `src/features/auth/components/OnboardingForm.ui.tsx`.
-    *   Use Shadcn Form + React Hook Form (standard in Shadcn).
-    *   Inputs for Username and Job Title.
+    *   Use Shadcn UI components (Label, Input, Button) for Username and Job Title.
+    *   Wire the form `action` prop directly to `saveUserInfo` (no client-side state management).
 
-**8. Auth Gate (The Logic)**
-*   **Action:** Create `src/features/auth/components/AuthGate.component.tsx`.
-    *   Wrap `children`.
-    *   If `username` exists in Context -> Render `children` + "Edit Profile" button.
-    *   If not -> Render `OnboardingForm.ui`.
-    *   Add this to `app/layout.tsx` or `app/providers.tsx`.
+**8. Blocking Modal & Gatekeeper Page**
+*   **Action:** Create `src/features/auth/components/UserBlockingModal.tsx`.
+    *   Use Shadcn `Dialog` with `open` always true and no close button.
+    *   Render `OnboardingForm.ui` inside the dialog body so the user cannot bypass it.
+*   **Action:** Update `app/page.tsx` to act as the server-side gatekeeper:
+    *   Use `cookies()` to read the `user_session` cookie.
+    *   If the cookie is missing or incomplete -> return `<UserBlockingModal />` (Requirement 7).
+    *   If the cookie is valid -> render the **Information Page shell**, which will later host the paginated GraphQL list (Requirement 8.c).
 
 ### Phase 4: The Information Page (Anime)
 

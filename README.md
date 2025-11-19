@@ -115,6 +115,12 @@ Basic workflow:
    ```bash
    npm run dev
    ```
-3. Open the app at `http://localhost:3000`, complete the onboarding form, and start exploring the anime list.
+3. Open the app at `http://localhost:3000`:
+   - You will first see a **blocking onboarding modal**.
+   - Enter a **username** and **job title** and click **Continue**. This stores a `user_session` cookie and unlocks the Anime Information Page.
+4. Explore the Information Page:
+   - Use the pagination controls to move between pages (the `?page=` URL query param updates).
+   - Click any anime card to open a modal with more details.
+5. To re-test the onboarding flow, clear the `user_session` cookie in your browser devtools and refresh the page.
 
 
