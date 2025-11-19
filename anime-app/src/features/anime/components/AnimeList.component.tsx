@@ -2,6 +2,8 @@
 
 import { useSearchParams, useRouter } from "next/navigation";
 import { useAnimeList } from "@/hooks/useAnimeList";
+import { AnimeGrid } from "./AnimeGrid.ui";
+import type { AnimeMedia } from "@/graphql/types";
 
 export function AnimeList() {
   const searchParams = useSearchParams();
@@ -37,6 +39,13 @@ export function AnimeList() {
   const hasNextPage = Boolean(pageInfo?.hasNextPage);
   const hasPrevPage = page > 1;
 
+  const items: AnimeMedia[] = data?.Page.media ?? [];
+
+  const handleItemClick = (media: AnimeMedia) => {
+    // Step 11 will implement modal interaction when an item is clicked.
+    void media;
+  };
+
   return (
     <section className="space-y-4">
       <header className="flex items-baseline justify-between gap-2">
@@ -45,12 +54,7 @@ export function AnimeList() {
         </h2>
       </header>
 
-      {/* Step 10 will replace this with AnimeGrid.ui + proper cards */}
-      <ul className="space-y-2 text-sm">
-        {data?.Page.media.map((media) => (
-          <li key={media.id}>{media.title.romaji}</li>
-        ))}
-      </ul>
+      <AnimeGrid items={items} onItemClick={handleItemClick} />
 
       <div className="flex items-center justify-between pt-2 text-xs">
         <button
