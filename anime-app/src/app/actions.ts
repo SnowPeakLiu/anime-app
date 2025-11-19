@@ -20,7 +20,9 @@ export async function saveUserInfo(formData: FormData) {
 
   const user: UserSession = { username, jobTitle };
 
-  cookies().set(USER_SESSION_COOKIE, JSON.stringify(user), {
+  const cookieStore = await cookies();
+
+  cookieStore.set(USER_SESSION_COOKIE, JSON.stringify(user), {
     httpOnly: true,
     sameSite: 'lax',
     path: '/',

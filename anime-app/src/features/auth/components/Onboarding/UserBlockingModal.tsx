@@ -7,7 +7,7 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
-import { OnboardingForm } from "@/features/auth/components/OnboardingForm.ui";
+import { OnboardingForm } from "@/features/auth/components/Onboarding/OnboardingForm.ui";
 
 export function UserBlockingModal() {
   return (

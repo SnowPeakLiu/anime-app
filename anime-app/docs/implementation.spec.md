@@ -18,13 +18,13 @@ src/
 │   ├── actions.ts           # Server Actions (e.g. saveUserInfo)
 │   └── providers.tsx        # Wraps Apollo Client for client-side GraphQL
 ├── components/
-│   ├── ui/                  # Shadcn UI generic components (Button, Input, etc.)
-│   └── UserBlockingModal.tsx # Blocking modal shell using Dialog
+│   └── ui/                  # Shadcn UI generic components (Button, Input, etc.)
 ├── features/
-│   ├── auth/                # "Blocking Element" form logic
-│   │   └── components/
-│   │       └── OnboardingForm.ui.tsx    # Form wired to server action
-│   ├── anime/               # Anime "Information Page" logic (Phase 4)
+│   ├── auth/                # Auth-related UI and logic
+│   │   └── components/Onboarding/
+│   │       ├── OnboardingForm.ui.tsx      # Onboarding form UI
+│   │       └── UserBlockingModal.tsx      # Auth blocking modal UI
+│   ├── anime/               # Anime Information Page UI and logic
 │   │   ├── anime.types.ts
 │   │   ├── components/
 │   │   │   ├── AnimeList.component.tsx  # Smart: Calls hooks, manages pagination
@@ -107,7 +107,7 @@ Follow these steps sequentially. Each step represents 1-2 commits.
     *   Wire the form `action` prop directly to `saveUserInfo` (no client-side state management).
 
 **8. Blocking Modal & Gatekeeper Page**
-*   **Action:** Create `src/components/UserBlockingModal.tsx`.
+*   **Action:** Create `src/features/auth/components/UserBlockingModal.tsx`.
     *   Use Shadcn `Dialog` with `open` always true and no close button.
     *   Render `OnboardingForm.ui` inside the dialog body so the user cannot bypass it.
 *   **Action:** Update `app/page.tsx` to act as the server-side gatekeeper:

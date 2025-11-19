@@ -1,5 +1,5 @@
 import { cookies } from "next/headers";
-import { UserBlockingModal } from "@/components/UserBlockingModal";
+import { UserBlockingModal } from "@/features/auth/components/Onboarding/UserBlockingModal";
 
 export default async function Home() {
   const cookieStore = await cookies();
