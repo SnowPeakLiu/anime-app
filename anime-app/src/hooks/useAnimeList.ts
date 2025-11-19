@@ -6,7 +6,7 @@ export const useAnimeList = (page: number) => {
   const { data, loading, error } = useQuery<AnimeListResponse, AnimeListVars>(
     GET_ANIME_LIST,
     {
-      variables: { page, perPage: 10 },
+      variables: { page, perPage: 12 },
       notifyOnNetworkStatusChange: true,
     },
   );
