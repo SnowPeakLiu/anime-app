@@ -1,5 +1,6 @@
 import { cookies } from "next/headers";
 import { UserBlockingModal } from "@/features/auth/components/Onboarding/UserBlockingModal";
+import { AnimeList } from "@/features/anime/components/AnimeList.component";
 
 export default async function Home() {
   const cookieStore = await cookies();
@@ -19,19 +20,18 @@ export default async function Home() {
     return <UserBlockingModal />;
   }
 
-  // Information Page and GraphQL will be implemented in a later phase.
   return (
     <main className="flex flex-1 items-center justify-center">
-      <div className="text-center">
-        <h1 className="text-3xl font-semibold tracking-tight">
-          Anime Information Page
-        </h1>
-        <p className="mt-2 text-sm text-muted-foreground">
-          Welcome, {user.username} ({user.jobTitle})
-        </p>
-        <p className="mt-1 text-xs text-muted-foreground">
-          Anime list and GraphQL data will be wired in next.
-        </p>
+      <div className="w-full max-w-5xl px-4 py-8 space-y-6">
+        <header className="text-center sm:text-left">
+          <h1 className="text-3xl font-semibold tracking-tight">
+            Anime Information Page
+          </h1>
+          <p className="mt-2 text-sm text-muted-foreground">
+            Welcome, {user.username} ({user.jobTitle})
+          </p>
+        </header>
+        <AnimeList />
       </div>
     </main>
   );
